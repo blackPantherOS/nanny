@@ -28,7 +28,7 @@ except ImportError:
 
 nanny_top_dir = os.path.dirname(os.path.dirname(__file__))
 nanny_win32_dist_dir = os.path.join(nanny_top_dir, "Nanny")
-nanny_python_dir = os.path.join(nanny_top_dir, "lib", "python2.6", "site-packages")
+nanny_python_dir = os.path.join(nanny_top_dir, "lib", "python2.7", "site-packages")
 
 sys.path.append(nanny_python_dir)
 

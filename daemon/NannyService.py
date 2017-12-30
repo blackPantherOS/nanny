@@ -38,7 +38,7 @@ import servicemanager
 #Add nanny module to python paths
 if not hasattr(sys, "frozen") :
     root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    nanny_lib_path = os.path.join(root_path, "lib", "python2.6", "site-packages")
+    nanny_lib_path = os.path.join(root_path, "lib", "python2.7", "site-packages")
     sys.path.append(nanny_lib_path)
 
 

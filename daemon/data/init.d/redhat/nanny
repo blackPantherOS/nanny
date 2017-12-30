@@ -10,20 +10,20 @@
 #
 
 # Sanity checks.
-TWISTD_BINARY=`which twistd`
-[ -x $TWISTD_BINARY ] || (echo "missing twistd" && exit 1)
+TWISTD_BINARY=`which twistd 2>/dev/null`
+[ -x $TWISTD_BINARY ] || (gprintf "missing twistd\n" && exit 1)
 
 TWISTED_FILE="/usr/share/nanny/daemon/nanny.tap"
 if [ -e /usr/local/share/nanny/daemon/nanny.tap ] ;
 then
     TWISTED_FILE="/usr/local/share/nanny/daemon/nanny.tap"
 fi
-[ -x $TWISTD_FILE ] || (echo "missing nanny" && exit 1)
+[ -x $TWISTD_FILE ] || (gprintf "missing nanny\n" && exit 1)
 
 
 #Twisted INFO
 TWISTED_NAME='nanny'
-TWISTED_PID_DIR='/var/run/'
+TWISTED_PID_DIR='/run/'
 TWISTED_PID="$TWISTED_PID_DIR/nanny.pid"
 TWISTED_LOG='/var/log/nanny.log'
 
@@ -34,9 +34,9 @@ GROUP=`id -g root`
 if [ -f /etc/rc.d/init.d/functions ]
 then
 	. /etc/rc.d/init.d/functions
-	START="daemon"
+	DSTART=daemon
 	STOP="killproc -p $TWISTED_PID -d 10 twistd"
-	START="$START \"$TWISTD_BINARY -r glib2 -y $TWISTED_FILE --pidfile=$TWISTED_PID --logfile=$TWISTED_LOG -u $USER -g $GROUP\""
+	START="$DSTART `$TWISTD_BINARY -r glib2 -y $TWISTED_FILE --pidfile=$TWISTED_PID --logfile=$TWISTED_LOG -u $USER -g $GROUP`"
 else
 	. /lib/lsb/init-functions
 	START="start-stop-daemon --start --pidfile=$TWISTED_PID --exec"
@@ -45,7 +45,7 @@ else
 fi
 
 start() {
-    echo -n "Starting $TWISTED_NAME: "
+    gprintf "Starting %s: " "$TWISTED_NAME"
     [ -d $TWISTED_PID_DIR ] || mkdir -p $TWISTED_PID_DIR
 	$START
 	RETVAL=$?
@@ -58,7 +58,7 @@ start() {
 }
 
 stop() {
-    echo -n "Stopping $TWISTED_NAME: "
+    gprintf "Stopping %s: " "$TWISTED_NAME"
 	$STOP
 	RETVAL=$?
 	rm -f $TWISTED_PID
@@ -87,7 +87,7 @@ case "$1" in
     reload)
         ;;
     *)
-	echo $"Usage: $0 {start|stop|status|restart|condrestart|reload}"
+	gprintf "Usage: %s {start|stop|status|restart|condrestart|reload}\n" "$0"
 	;;
 esac
 exit $RETVAL

@@ -35,7 +35,7 @@ import sys
 from tempfile import TemporaryFile, gettempdir
 import time
 
-import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter
 
 from Controllers import BlockingDeferred
 
